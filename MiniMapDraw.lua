@@ -61,7 +61,6 @@ function MiniMapDraw.OnUpdate()
 	for i,tableinfo in pairs(MiniMapDraw.TableParticle) do
 		if MiniMapDraw.TableParticle[i] then
 			if MiniMapDraw.TableParticle[i].timing <= GameRules.GetGameTime() then
-				Log.Write(i)
 				MiniMapDraw.TableParticle[i] = nil
 			end
 		end
