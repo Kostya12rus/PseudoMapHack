@@ -1,7 +1,14 @@
 local MiniMapDraw = {}
-MiniMapDraw.TrigerActiv = Menu.AddOption({"Kostya12rus","MiniMapDraw"}, "Off/On", "")
+MiniMapDraw.TrigerActiv = Menu.AddOption({"Kostya12rus", "MiniMapDraw"}, "Off/On", "")
+MiniMapDraw.IconSize = Menu.AddOption({"Kostya12rus", "MiniMapDraw"}, "Size minimap icon", "", 500, 1500, 100)
+
 function MiniMapDraw.OnParticleCreate(particle)
 	if not Menu.IsEnabled(MiniMapDraw.TrigerActiv) then return end
+	for _,nameparticle in pairs(MiniMapDraw.TableIngoreParticleName) do
+		if particle.name == nameparticle then
+			return
+		end
+	end
 	if not MiniMapDraw.TableParticle[particle.index] then
 		MiniMapDraw.TableParticle[particle.index] = 
 		{
@@ -67,18 +74,18 @@ function MiniMapDraw.OnUpdate()
 		if not tableinfo.drawing and (tableinfo.poscast0 or tableinfo.poscast1) then
 			if tableinfo.entity and Entity.IsHero(tableinfo.entity) then
 				if tableinfo.poscast0 then
-					MiniMap.AddIcon(nil, Hero.GetIcon(tableinfo.entity), tableinfo.poscast0, 255, 255, 255, 255, 3, 600)
+					MiniMap.AddIcon(nil, Hero.GetIcon(tableinfo.entity), tableinfo.poscast0, 255, 255, 255, 255, 3, Menu.GetValue(MiniMapDraw.IconSize))
 					tableinfo.drawing = true
 				else
-					MiniMap.AddIcon(nil, Hero.GetIcon(tableinfo.entity), tableinfo.poscast1, 255, 255, 255, 255, 3, 600)
+					MiniMap.AddIcon(nil, Hero.GetIcon(tableinfo.entity), tableinfo.poscast1, 255, 255, 255, 255, 3, Menu.GetValue(MiniMapDraw.IconSize))
 					tableinfo.drawing = true
 				end
 			else
 				if tableinfo.poscast0 then
-					MiniMap.AddIconByName(nil, "minimap_plaincircle", tableinfo.poscast0, 255, 255, 255, 255, 3, 800)
+					MiniMap.AddIconByName(nil, "minimap_plaincircle", tableinfo.poscast0, 255, 255, 255, 255, 3, Menu.GetValue(MiniMapDraw.IconSize))
 					tableinfo.drawing = true
 				else
-					MiniMap.AddIconByName(nil, "minimap_plaincircle", tableinfo.poscast1, 255, 255, 255, 255, 3, 800)
+					MiniMap.AddIconByName(nil, "minimap_plaincircle", tableinfo.poscast1, 255, 255, 255, 255, 3, Menu.GetValue(MiniMapDraw.IconSize))
 					tableinfo.drawing = true
 				end
 			end
@@ -109,6 +116,11 @@ end
 
 function MiniMapDraw.init()
 	MiniMapDraw.TableParticle = {}
+	MiniMapDraw.TableIngoreParticleName = 
+	{
+		"dire_creep_spawn",
+		"radiant_creep_spawn"
+	}
 end
 
 function MiniMapDraw.OnGameStart()
