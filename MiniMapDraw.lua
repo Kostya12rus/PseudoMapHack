@@ -1,6 +1,7 @@
 local MiniMapDraw = {}
 MiniMapDraw.TrigerActiv = Menu.AddOption({"Kostya12rus", "MiniMapDraw"}, "Off/On", "")
 MiniMapDraw.IconSize = Menu.AddOption({"Kostya12rus", "MiniMapDraw"}, "Size minimap icon", "", 500, 1500, 100)
+MiniMapDraw.HeroIconOnly = Menu.AddOption({"Kostya12rus", "MiniMapDraw"}, "Only Hero icon", "")
 
 function MiniMapDraw.OnParticleCreate(particle)
 	if not Menu.IsEnabled(MiniMapDraw.TrigerActiv) then return end
@@ -70,7 +71,7 @@ function MiniMapDraw.OnUpdate()
 		if tableinfo.poscast1 then
 			tableinfo.poscast1 = MiniMapDraw.CheckVector(tableinfo.poscast1)
 		end
-		if not tableinfo.drawing and (tableinfo.poscast0 or tableinfo.poscast1) then
+		if not tableinfo.drawing and (tableinfo.poscast0 or tableinfo.poscast1) and (not Menu.IsEnabled(MiniMapDraw.TrigerActiv) or (Menu.IsEnabled(MiniMapDraw.TrigerActiv) and tableinfo.entity and Entity.IsHero(tableinfo.entity))) then
 			if tableinfo.entity and Entity.IsHero(tableinfo.entity) then
 				if tableinfo.poscast0 then
 					MiniMap.AddIcon(nil, Hero.GetIcon(tableinfo.entity), tableinfo.poscast0, 255, 255, 255, 255, 3, Menu.GetValue(MiniMapDraw.IconSize))
@@ -108,6 +109,9 @@ function MiniMapDraw.CheckVector(vec)
 		return nil
 	end
 	if x == y or y == z or z == x then
+		return nil
+	end
+	if x - math.floor(x) == 0 or y - math.floor(y) == 0 then
 		return nil
 	end
 	return vec
