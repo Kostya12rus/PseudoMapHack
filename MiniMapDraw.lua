@@ -71,7 +71,7 @@ function MiniMapDraw.OnUpdate()
 		if tableinfo.poscast1 then
 			tableinfo.poscast1 = MiniMapDraw.CheckVector(tableinfo.poscast1)
 		end
-		if not tableinfo.drawing and (tableinfo.poscast0 or tableinfo.poscast1) and (not Menu.IsEnabled(MiniMapDraw.TrigerActiv) or (Menu.IsEnabled(MiniMapDraw.TrigerActiv) and tableinfo.entity and Entity.IsHero(tableinfo.entity))) then
+		if not tableinfo.drawing and (tableinfo.poscast0 or tableinfo.poscast1) and (not Menu.IsEnabled(MiniMapDraw.HeroIconOnly) or (Menu.IsEnabled(MiniMapDraw.HeroIconOnly) and tableinfo.entity and Entity.IsHero(tableinfo.entity))) then
 			if tableinfo.entity and Entity.IsHero(tableinfo.entity) then
 				if tableinfo.poscast0 then
 					MiniMap.AddIcon(nil, Hero.GetIcon(tableinfo.entity), tableinfo.poscast0, 255, 255, 255, 255, 3, Menu.GetValue(MiniMapDraw.IconSize))
