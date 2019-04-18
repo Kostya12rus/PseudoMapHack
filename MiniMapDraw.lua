@@ -105,7 +105,6 @@ end
 function MiniMapDraw.CheckVector(vec)
 	if not vec then return end
 	local hasnpcinpos = NPCs.InRadius(vec,10,2,Enum.TeamType.TEAM_BOTH)
-	Console.Print(tostring(vec))
 	if hasnpcinpos and #hasnpcinpos ~= 0 then
 		for i,j in pairs(hasnpcinpos) do
 			if NPCs.Contains(j) and NPC.GetUnitName(j) ~= "npc_dota_thinker" then
@@ -118,7 +117,6 @@ function MiniMapDraw.CheckVector(vec)
 		local realz = math.ceil(realpos:GetZ())
 		local checkz = math.ceil(vec:GetZ())
 		if (realz+10 >= checkz and realz-2 <= checkz) and checkz < 1000 and checkz > -300 then
-			Console.Print(tostring(vec) .. " | " .. tostring(realpos) .. " - прошло проверку")
 			return true
 		end
 	end
