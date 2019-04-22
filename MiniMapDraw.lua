@@ -6,9 +6,10 @@ MiniMapDraw.IconSize = Menu.AddOption({"Kostya12rus", "MiniMapDraw"}, "Size mini
 
 function MiniMapDraw.OnParticleCreate(particle)
 	if not Menu.IsEnabled(MiniMapDraw.TrigerActiv) then return end
+	local ignorethisparticle = false
 	for _,nameparticle in pairs(MiniMapDraw.TableIngoreParticleName) do
 		if particle.name == nameparticle then
-			return
+			ignorethisparticle = true
 		end
 	end
 	if not MiniMapDraw.TableParticle[particle.index] then
@@ -28,7 +29,8 @@ function MiniMapDraw.OnParticleCreate(particle)
 			entity = npc,
 			pos = nil,
 			timing = GameRules.GetGameTime() + 3,
-			drawing = false
+			drawing = false,
+			ignore = ignorethisparticle,
 		}
 	end
 end
@@ -79,16 +81,17 @@ function MiniMapDraw.OnParticleUpdateEntity(particle)
 end
 
 function MiniMapDraw.OnUpdate()
-	Renderer.SetDrawColor(255,255,255,255)
 	if not Menu.IsEnabled(MiniMapDraw.TrigerActiv) then return end
+	if not Heroes.GetLocal() or not Heroes.Contains(Heroes.GetLocal()) then return end
 	if MiniMapDraw.TableParticle then
 		for i,tableinfo in pairs(MiniMapDraw.TableParticle) do
 			if tableinfo then
-				if tableinfo.timing <= GameRules.GetGameTime() or not tableinfo.pos then
+				local herotriger = tableinfo.entity and NPCs.Contains(tableinfo.entity) and Entity.IsSameTeam(Heroes.GetLocal(), tableinfo.entity)
+				if tableinfo.timing <= GameRules.GetGameTime() or not tableinfo.pos or herotriger then
 					MiniMapDraw.TableParticle[i] = nil
 				end
 			end
-			if not tableinfo.drawing and tableinfo.pos then
+			if not tableinfo.drawing and tableinfo.pos and not tableinfo.ignore then
 				if tableinfo.entity and NPCs.Contains(tableinfo.entity) and Heroes.Contains(tableinfo.entity) then
 					MiniMap.AddIcon(nil, Hero.GetIcon(tableinfo.entity), tableinfo.pos, 255, 255, 255, 255, 3, Menu.GetValue(MiniMapDraw.IconSize))
 					Renderer.AddWorldIcon(nil, Hero.GetIcon(tableinfo.entity), tableinfo.pos, 255, 255, 255, 255, 3, 32)
@@ -128,7 +131,7 @@ function MiniMapDraw.init()
 	MiniMapDraw.TableIngoreParticleName = 
 	{
 		"dire_creep_spawn",
-		"radiant_creep_spawn"
+		"radiant_creep_spawn",
 	}
 end
 
