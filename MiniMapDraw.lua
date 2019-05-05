@@ -23,7 +23,7 @@ function MiniMapDraw.OnParticleCreate(particle)
 		if NPCs.Contains(particle.entity) and NPCs.Contains(particle.entityForModifiers) then
 			npc = particle.entityForModifiers
 		end
-		if Entity.IsSameTeam(Heroes.GetLocal(), npc) then return end
+		if npc and Entity.IsSameTeam(Heroes.GetLocal(), npc) then return end
 		MiniMapDraw.TableParticle[particle.index] = 
 		{
 			name = particle.name,
