@@ -89,9 +89,12 @@ function MiniMapDraw.OnUpdate()
 	if MiniMapDraw.TableParticle then
 		for i,tableinfo in pairs(MiniMapDraw.TableParticle) do
 			if tableinfo then
-				local herotriger = tableinfo.entity and NPCs.Contains(tableinfo.entity) and Entity.IsSameTeam(Heroes.GetLocal(), tableinfo.entity)
-				if tableinfo.timing <= GameRules.GetGameTime() or not tableinfo.pos or herotriger then
+				local realhero = tableinfo.entity and NPCs.Contains(tableinfo.entity)
+				local herotriger = realhero and Entity.IsSameTeam(Heroes.GetLocal(), tableinfo.entity)
+				local ingorenamehero = realhero and (NPC.GetUnitName(tableinfo.entity) == "npc_dota_hero_grimstroke")
+				if tableinfo.timing <= GameRules.GetGameTime() or not tableinfo.pos or herotriger or ingorenamehero then
 					MiniMapDraw.TableParticle[i] = nil
+					return
 				end
 			end
 			if not tableinfo.drawing and tableinfo.pos and not tableinfo.ignore then
