@@ -92,7 +92,10 @@ end
 
 function MiniMapDraw.OnDraw()
 	if not Menu.IsEnabled(MiniMapDraw.TrigerActiv) then return end
-	if not Players.GetLocal() or not Players.Contains(Players.GetLocal()) then return end
+	if not Players.GetLocal() or not Players.Contains(Players.GetLocal()) then 
+		MiniMapDraw.init()
+		return 
+	end
 	if not MiniMapDraw.TeamNumLocal and (not Player.GetPlayerData(Players.GetLocal()) or Player.GetPlayerData(Players.GetLocal()).teamNum == 1) then
 		MiniMapDraw.TeamNumLocal = MiniMapDraw.ChangeTeam()
 	end
