@@ -96,7 +96,7 @@ function MiniMapDraw.OnDraw()
 		MiniMapDraw.init()
 		return 
 	end
-	if not MiniMapDraw.TeamNumLocal and (not Player.GetPlayerData(Players.GetLocal()) or Player.GetPlayerData(Players.GetLocal()).teamNum == 1) then
+	if not MiniMapDraw.TeamNumLocal and (not Player.GetPlayerData(Players.GetLocal()) or Player.GetPlayerData(Players.GetLocal()).teamNum < 2) then
 		MiniMapDraw.TeamNumLocal = MiniMapDraw.ChangeTeam()
 	end
 	if Heroes.GetLocal() and Heroes.Contains(Heroes.GetLocal()) and Entity.GetTeamNum(Heroes.GetLocal()) then
